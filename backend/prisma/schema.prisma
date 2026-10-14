@@ -1,0 +1,74 @@
+// Prisma Schema for Expense Tracker Pro (SQLite default for zero-config local run)
+// To use PostgreSQL, see schema.postgresql.prisma or set provider = "postgresql"
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  password     String
+  role         String        @default("user") // "user" | "admin"
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model Transaction {
+  id            String   @id @default(uuid())
+  userId        String
+  type          String   // "income" | "expense"
+  amount        Float
+  description   String
+  category      String
+  date          String   // ISO date string YYYY-MM-DD
+  paymentMethod String   // "Cash" | "Bank" | "Card" | "Mobile Payment"
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([date])
+  @@index([category])
+  @@index([type])
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  icon      String   // emoji or lucide icon name
+  type      String   // "income" | "expense"
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model AppSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model OtpVerification {
+  id        String   @id @default(uuid())
+  email     String
+  otp       String
+  type      String   // "REGISTER" | "LOGIN" | "FORGOT_PASSWORD"
+  payload   String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email, type])
+}

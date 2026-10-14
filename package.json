@@ -1,0 +1,25 @@
+{
+  "name": "expense-tracker-pro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready Expense Tracker Pro full-stack finance web application",
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "db:setup": "npm --prefix backend run db:setup",
+    "db:seed": "npm --prefix backend run prisma:seed"
+  },
+  "keywords": [
+    "expense-tracker",
+    "finance",
+    "react",
+    "typescript",
+    "express",
+    "prisma",
+    "postgresql",
+    "sqlite"
+  ],
+  "author": "",
+  "license": "MIT"
+}
